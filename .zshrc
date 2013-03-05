@@ -104,6 +104,7 @@ alias githh='git log -n 1 --pretty=format:'%h''
 alias tl='tmux list-sessions'
 alias tk='tmux kill-session -t'
 alias ts='tmux switch-client -t'
+function tm() { tmux move-window -s $1 -t $2}
 alias tm='sh ~/.zsh/.tmux_move_window.sh'
 alias uw='echo "URxvt.background : #ffffff" | xrdb -screen'
 alias ub='echo "URxvt.background : #1c1c1c" | xrdb -screen'
@@ -112,18 +113,9 @@ alias val='valgrind --tool=memcheck --leak-check=full'
 alias irc='dtach -A /tmp/dtach.irc -z -r winch zsh'
 alias tmux='tmux -2'
 
-#vim stuff
-alias vs='vim --servername VIM'
-alias ve='vim --remote'
-alias vt='vim --remote-tab'
-
 
 #shortcuts
-if [ `uname` = "GNU/Linux" ]; then
-    alias inst='cd /mnt/storagewin/instructor/'
-    alias done='cd /mnt/storagewin/Dario/FIT/done/'
-    alias proj='cd /mnt/ssd_common/proj/nsn/'
-    # alias proj='cd /mnt/storagewin/shared_data/proj/nsn/'
+if [ `uname` = "Linux" ]; then
     alias lin='cd /mnt/.systems/lin_hdd/'
     alias linh='cd /mnt/.systems/lin_hdd/home/instructor/'
 fi
@@ -221,3 +213,79 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/lib64
 export CL_LOG_ERRORS="stdout"
 
 # export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>' -" #NOT WORKING
+
+
+#--------------------------------------------------------
+# VIM SERVER ID
+#   Always start vim with unique servername.
+#--------------------------------------------------------
+VIM_SERVER_ID_FILE=$HOME/.vim_server_id
+
+vs_resetCounter()
+{
+    rm "$VIM_SERVER_ID_FILE"
+    echo "0" > "$VIM_SERVER_ID_FILE"
+}
+
+vs_setCounterVal()
+{
+    if [ ! -f "$VIM_SERVER_ID_FILE" ]; then
+        echo "0" > "$VIM_SERVER_ID_FILE"
+    fi
+    sed -i s/.*/$1/ "$VIM_SERVER_ID_FILE"
+}
+
+vs_incrementCounter()
+{
+    if [ ! -f "$VIM_SERVER_ID_FILE" ]; then
+        echo "0" > "$VIM_SERVER_ID_FILE"
+    fi
+
+    serverlist=$($VIM_PATH --serverlist 2>/dev/null)
+    value=$(<"$VIM_SERVER_ID_FILE")
+    ((value++))
+    found=true
+    while $found; do
+        echo $serverlist | while read x; do
+            if [[ "$x" == "$value" ]]; then
+                ((value++))
+                found=true
+                break
+            fi
+        done
+        found=false
+    done
+    sed -i s/.*/$value/ "$VIM_SERVER_ID_FILE"
+}
+VIM_PATH=$(which vim)
+#not sure overriding vim is good idea. choose another name?
+alias vim='vs_incrementCounter && vim --servername $(<"$VIM_SERVER_ID_FILE")'
+alias vrs='vs_resetCounter'
+
+function ve() 
+{ 
+    if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
+        #not a number
+        serverlist=$($VIM_PATH --serverlist 2>/dev/null)
+        echo $serverlist | read first
+        $VIM_PATH --servername $first --remote $1 
+    else
+        $VIM_PATH --servername $1 --remote $2 
+    fi
+}
+
+#code smell (duplicate)... no time to deal with it.
+function vt() 
+{ 
+    if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
+        #not a number
+        serverlist=$($VIM_PATH --serverlist 2>/dev/null)
+        echo $serverlist | read first
+        $VIM_PATH --servername $first --remote-tab $1 
+    else
+        $VIM_PATH --servername $1 --remote-tab $2 
+    fi
+}
+#--------------------------------------------------------
+
+
