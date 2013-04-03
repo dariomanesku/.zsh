@@ -114,10 +114,11 @@ alias irc='dtach -A /tmp/dtach.irc -z -r winch zsh'
 alias tmux='tmux -2'
 
 
-#shortcuts
+#shortcuts #temp
 if [ `uname` = "Linux" ]; then
     alias lin='cd /mnt/.systems/lin_hdd/'
     alias linh='cd /mnt/.systems/lin_hdd/home/instructor/'
+    alias cppbooks='cd /mnt/storage_hdd1/instructor/CppBooks/'
 fi
 
 #Colored ManPages
@@ -146,8 +147,8 @@ setopt PUSHD_TO_HOME
 setopt PUSHD_SILENT
 setopt PUSHD_IGNORE_DUPS
 
-#10 second wait if you do something that will delete everything
-setopt RM_STAR_WAIT
+#10 second wait if you do something that will delete everything...  NO!
+#setopt RM_STAR_WAIT
 
 #probably disables ctrl-s
 setopt NO_FLOW_CONTROL
@@ -232,7 +233,7 @@ vs_setCounterVal()
     if [ ! -f "$VIM_SERVER_ID_FILE" ]; then
         echo "0" > "$VIM_SERVER_ID_FILE"
     fi
-    sed -i s/.*/$1/ "$VIM_SERVER_ID_FILE"
+    sed -i 's/.*/'$value'/' "$VIM_SERVER_ID_FILE"
 }
 
 vs_incrementCounter()
@@ -241,7 +242,7 @@ vs_incrementCounter()
         echo "0" > "$VIM_SERVER_ID_FILE"
     fi
 
-    serverlist=$($VIM_PATH --serverlist 2>/dev/null)
+    serverlist=$($VIM --serverlist 2>/dev/null)
     value=$(<"$VIM_SERVER_ID_FILE")
     ((value++))
     found=true
@@ -255,10 +256,11 @@ vs_incrementCounter()
         done
         found=false
     done
-    sed -i s/.*/$value/ "$VIM_SERVER_ID_FILE"
+    sed -i 's/.*/'$value'/' "$VIM_SERVER_ID_FILE"
 }
-VIM_PATH=$(which vim)
 #not sure overriding vim is good idea. choose another name?
+VIM=$(which vim)
+alias vi=$VIM
 alias vim='vs_incrementCounter && vim --servername $(<"$VIM_SERVER_ID_FILE")'
 alias vrs='vs_resetCounter'
 
@@ -266,11 +268,11 @@ function ve()
 { 
     if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
         #not a number
-        serverlist=$($VIM_PATH --serverlist 2>/dev/null)
+        serverlist=$($VIM --serverlist 2>/dev/null)
         echo $serverlist | read first
-        $VIM_PATH --servername $first --remote $1 
+        $VIM --servername $first --remote $1 
     else
-        $VIM_PATH --servername $1 --remote $2 
+        $VIM --servername $1 --remote $2 
     fi
 }
 
@@ -279,13 +281,14 @@ function vt()
 { 
     if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
         #not a number
-        serverlist=$($VIM_PATH --serverlist 2>/dev/null)
+        serverlist=$($VIM --serverlist 2>/dev/null)
         echo $serverlist | read first
-        $VIM_PATH --servername $first --remote-tab $1 
+        $VIM --servername $first --remote-tab $1 
     else
-        $VIM_PATH --servername $1 --remote-tab $2 
+        $VIM --servername $1 --remote-tab $2 
     fi
 }
 #--------------------------------------------------------
 
-
+#test:
+alias make='make -j 4' #give it speed !
