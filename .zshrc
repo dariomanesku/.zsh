@@ -119,6 +119,7 @@ if [ `uname` = "Linux" ]; then
     alias lin='cd /mnt/.systems/lin_hdd/'
     alias linh='cd /mnt/.systems/lin_hdd/home/instructor/'
     alias cppbooks='cd /mnt/storage_hdd1/instructor/CppBooks/'
+    alias prostuff='cd /mnt/storage_hdd1/pro_stuff/'
 fi
 
 #Colored ManPages
@@ -290,5 +291,9 @@ function vt()
 }
 #--------------------------------------------------------
 
-#test:
-alias make='make -j 4' #give it speed !
+#test: (not a good idea after all)
+# alias make='make -j 4' #give it speed ! 
+
+CSCOPE_DB=$HOME/.ctags/cscope.out
+export CSCOPE_DB
+
