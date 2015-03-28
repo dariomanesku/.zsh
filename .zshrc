@@ -176,7 +176,7 @@ setopt RC_EXPAND_PARAM
 unsetopt LIST_AMBIGUOUS
 setopt COMPLETE_IN_WORD
 
-#--------------------- 
+#---------------------
 
 #TEST
 #-----
@@ -197,7 +197,7 @@ alias lh='fc -RI' #load shared history
 
 bindkey -M viins '^x^f' complete-word
 
-#for tmux to open new window in current dir. 
+#for tmux to open new window in current dir.
 TMUX_PWD_COMMAND='$([ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#I") $PWD)'
 PS1=$TMUX_PWD_COMMAND$PS1
 
@@ -214,85 +214,85 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/lib64
 
 export CL_LOG_ERRORS="stdout"
 
-# export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>' -" #NOT WORKING
-
-
-#--------------------------------------------------------
-# VIM SERVER ID
-#   Always start vim with unique servername.
-#--------------------------------------------------------
-VIM_SERVER_ID_FILE=$HOME/.vim_server_id
-
-vs_resetCounter()
-{
-    rm "$VIM_SERVER_ID_FILE"
-    echo "0" > "$VIM_SERVER_ID_FILE"
-}
-
-vs_setCounterVal()
-{
-    if [ ! -f "$VIM_SERVER_ID_FILE" ]; then
-        echo "0" > "$VIM_SERVER_ID_FILE"
-    fi
-    sed -i 's/.*/'$value'/' "$VIM_SERVER_ID_FILE"
-}
-
-vs_incrementCounter()
-{
-    if [ ! -f "$VIM_SERVER_ID_FILE" ]; then
-        echo "0" > "$VIM_SERVER_ID_FILE"
-    fi
-
-    serverlist=$($VIM --serverlist 2>/dev/null)
-    value=$(<"$VIM_SERVER_ID_FILE")
-    ((value++))
-    found=true
-    while $found; do
-        echo $serverlist | while read x; do
-            if [[ "$x" == "$value" ]]; then
-                ((value++))
-                found=true
-                break
-            fi
-        done
-        found=false
-    done
-    sed -i 's/.*/'$value'/' "$VIM_SERVER_ID_FILE"
-}
-#not sure overriding vim is good idea. choose another name?
-VIM=$(which vim)
-alias vi=$VIM
-alias vim='vs_incrementCounter && vim --servername $(<"$VIM_SERVER_ID_FILE")'
-alias vrs='vs_resetCounter'
-
-function ve() 
-{ 
-    if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
-        #not a number
-        serverlist=$($VIM --serverlist 2>/dev/null)
-        echo $serverlist | read first
-        $VIM --servername $first --remote $1 
-    else
-        $VIM --servername $1 --remote $2 
-    fi
-}
-
-#code smell (duplicate)... no time to deal with it.
-function vt() 
-{ 
-    if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
-        #not a number
-        serverlist=$($VIM --serverlist 2>/dev/null)
-        echo $serverlist | read first
-        $VIM --servername $first --remote-tab $1 
-    else
-        $VIM --servername $1 --remote-tab $2 
-    fi
-}
-#--------------------------------------------------------
-
-#test: (not a good idea after all)
-# alias make='make -j 4' #give it speed ! 
+## export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>' -" #NOT WORKING
+#
+#
+##--------------------------------------------------------
+## VIM SERVER ID
+##   Always start vim with unique servername.
+##--------------------------------------------------------
+#VIM_SERVER_ID_FILE=$HOME/.vim_server_id
+#
+#vs_resetCounter()
+#{
+#    rm "$VIM_SERVER_ID_FILE"
+#    echo "0" > "$VIM_SERVER_ID_FILE"
+#}
+#
+#vs_setCounterVal()
+#{
+#    if [ ! -f "$VIM_SERVER_ID_FILE" ]; then
+#        echo "0" > "$VIM_SERVER_ID_FILE"
+#    fi
+#    sed -i 's/.*/'$value'/' "$VIM_SERVER_ID_FILE"
+#}
+#
+#vs_incrementCounter()
+#{
+#    if [ ! -f "$VIM_SERVER_ID_FILE" ]; then
+#        echo "0" > "$VIM_SERVER_ID_FILE"
+#    fi
+#
+#    serverlist=$($VIM --serverlist 2>/dev/null)
+#    value=$(<"$VIM_SERVER_ID_FILE")
+#    ((value++))
+#    found=true
+#    while $found; do
+#        echo $serverlist | while read x; do
+#            if [[ "$x" == "$value" ]]; then
+#                ((value++))
+#                found=true
+#                break
+#            fi
+#        done
+#        found=false
+#    done
+#    sed -i 's/.*/'$value'/' "$VIM_SERVER_ID_FILE"
+#}
+##not sure overriding vim is good idea. choose another name?
+#VIM=$(which vim)
+#alias vi=$VIM
+#alias vim='vs_incrementCounter && vim --servername $(<"$VIM_SERVER_ID_FILE")'
+#alias vrs='vs_resetCounter'
+#
+#function ve()
+#{
+#    if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
+#        #not a number
+#        serverlist=$($VIM --serverlist 2>/dev/null)
+#        echo $serverlist | read first
+#        $VIM --servername $first --remote $1
+#    else
+#        $VIM --servername $1 --remote $2
+#    fi
+#}
+#
+##code smell (duplicate)... no time to deal with it.
+#function vt()
+#{
+#    if ! [[ "$1" =~ ^[0-9]+$ ]] ; then
+#        #not a number
+#        serverlist=$($VIM --serverlist 2>/dev/null)
+#        echo $serverlist | read first
+#        $VIM --servername $first --remote-tab $1
+#    else
+#        $VIM --servername $1 --remote-tab $2
+#    fi
+#}
+##--------------------------------------------------------
+#
+##test: (not a good idea after all)
+## alias make='make -j 4' #give it speed !
 
 CSCOPE_DB=$HOME/.ctags/cscope.out
 export CSCOPE_DB
