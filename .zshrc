@@ -290,9 +290,6 @@ export CL_LOG_ERRORS="stdout"
 #    fi
 #}
 ##--------------------------------------------------------
-#
-##test: (not a good idea after all)
-## alias make='make -j 4' #give it speed !
 
 CSCOPE_DB=$HOME/.ctags/cscope.out
 export CSCOPE_DB
