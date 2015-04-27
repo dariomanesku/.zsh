@@ -214,9 +214,6 @@ export LD_LIBRARY_PATH=/usr/local/cuda/lib:/usr/local/cuda/lib64
 
 export CL_LOG_ERRORS="stdout"
 
-## export MANPAGER="col -b | vim -c 'set ft=man ts=8 nomod nolist nonu' -c 'nnoremap i <nop>' -" #NOT WORKING
-#
-#
 ##--------------------------------------------------------
 ## VIM SERVER ID
 ##   Always start vim with unique servername.
