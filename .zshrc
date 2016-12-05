@@ -92,34 +92,16 @@ bindkey -M vicmd '^r' history-incremental-search-backward
 
 #aliases
 alias mv='nocorrect mv'
-#alias ls='ls --color=tty -GF'
-alias ack='ack-grep'
-alias lsx='ls -XF'
 alias lsi='ls++ -F'
 alias lsia='ls++ -aF'
 alias lsix='ls++ -XF'
-alias lscolorsdefault='eval $(dircolors -p | dircolors)'
-alias lscolorsextended='eval $(dircolors -b $HOME/.dircolors)'
 alias tl='tmux list-sessions'
 alias tk='tmux kill-session -t'
 alias ts='tmux switch-client -t'
 function tm() { tmux move-window -s $1 -t $2}
 alias tm='sh ~/.zsh/.tmux_move_window.sh'
-alias uw='echo "URxvt.background : #ffffff" | xrdb -screen'
-alias ub='echo "URxvt.background : #1c1c1c" | xrdb -screen'
-alias vals='valgrind --tool=memcheck --leak-check=full --show-reachable=yes --num-callers=20 --track-fds=yes'
-alias val='valgrind --tool=memcheck --leak-check=full'
-alias irc='dtach -A /tmp/dtach.irc -z -r winch zsh'
 alias tmux='tmux -2'
 
-
-#shortcuts #temp
-if [ `uname` = "Linux" ]; then
-    alias lin='cd /mnt/.systems/lin_hdd/'
-    alias linh='cd /mnt/.systems/lin_hdd/home/instructor/'
-    alias cppbooks='cd /mnt/storage_hdd1/instructor/CppBooks/'
-    alias prostuff='cd /mnt/storage_hdd1/pro_stuff/'
-fi
 
 #Colored ManPages
 export LESS_TERMCAP_mb=$'\E[01;31m'
