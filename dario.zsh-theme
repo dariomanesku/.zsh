@@ -19,12 +19,13 @@ ZSH_THEME_GIT_TIME_SINCE_COMMIT_SHORT="%{$fg[green]%}"
 ZSH_THEME_GIT_TIME_SHORT_COMMIT_MEDIUM="%{$fg[yellow]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_LONG="%{$fg[red]%}"
 ZSH_THEME_GIT_TIME_SINCE_COMMIT_NEUTRAL="%{$fg[cyan]%}"
- 
+
 # Parsing git dirty status slows down my prompt tremendously without adding much value.
 # This variant of git_prompt_info just grabs the branch.
 function git_current_branch() {
-	ref=$(git symbolic-ref HEAD 2> /dev/null) || return
-    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$ZSH_THEME_GIT_PROMPT_SUFFIX"
+    ref=$(git symbolic-ref      HEAD 2> /dev/null) || return
+    sha=$(git rev-parse --short HEAD 2> /dev/null) || return
+    echo "$ZSH_THEME_GIT_PROMPT_PREFIX${sha} - ${ref#refs/heads/}$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 # PROMPT='[%{${fg_bold[red]}%}%*%{$reset_color%}][%{${fg_bold[magenta]}%}%~%{$reset_color%}][%{${fg_bold[green]}%}%n@%m%{$reset_color%}]$(git_prompt_info)
@@ -70,7 +71,7 @@ function git_time_since_commit() {
             fi
 
 
-  			echo -n "$ZSH_THEME_GIT_PROMPT_PREFIX"
+            echo -n "$ZSH_THEME_GIT_PROMPT_PREFIX"
             if [ "$HOURS" -gt 24 ]; then
                 echo -n "$COLOR${DAYS}d${SUB_HOURS}h${SUB_MINUTES}m%{$reset_color%}"
             elif [ "$MINUTES" -gt 60 ]; then
